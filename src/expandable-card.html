@@ -1,0 +1,86 @@
+<!-- Dependencies -->
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+
+<dom-module id="expandable-card">
+
+<!-- DOM + styling -->
+<template>
+    <!-- Element styling -->
+    <style>
+        :host {
+            display: block;
+            float: left;
+
+        }
+        html {
+          box-sizing: border-box;
+        }
+        *, *:before, *:after {
+          box-sizing: inherit;
+        }
+        paper-card {
+            position: relative;
+            margin: 10px 0;
+            width: 100%;
+            display:block;
+        }
+        /* Sizing rules for different devices */
+        @media (max-width: 900px) {
+            :host {
+                width: 100%;
+            }
+        }
+        @media (min-width: 901px) {
+            :host {
+                width: 50%;
+            }
+        }
+
+        #like-btn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 1;
+        }
+        .liked {
+            fill: red;
+        }
+    </style>
+
+    <!-- Element DOM -->
+    <paper-card class="white">
+        <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
+        <div class="card-content" on-tap="toggle">
+            <h1>Title Text</h1>
+            <iron-collapse id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
+            </iron-collapse>
+        </div>
+    </paper-card>
+</template>
+
+<!-- Element declaration + script -->
+<script>
+    Polymer({
+        is: 'expandable-card',
+
+        // Instance Methods
+        toggle: function () {
+            this.$.description.toggle();
+        },
+
+        toggleLiked: function () {
+            console.log("Like toggled");
+            var likeBtn = this.$['like-btn'];
+            if(likeBtn.className == "liked") {
+                likeBtn.className = "";
+                likeBtn.icon = "favorite-border";
+            } else {
+                likeBtn.className = "liked";
+                likeBtn.icon = "favorite";
+            }
+        }
+    });
+</script>
+</dom-module>
