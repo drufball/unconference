@@ -89,3 +89,61 @@ I chose Polymer because:
 - The App Toolbox does everything you need to get from zero to a barebones web app in 15 minutes. Optimize for hacking as soon as possible.
 
 # Rising Action
+## Installing the app template
+After choosing the Polymer App Toolbox, I installed the [polymer-cli](https://www.polymer-project.org/1.0/docs/tools/polymer-cli) and ran `polymer init app-drawer-template`. This gives me a nice responsive single page app template, that theoretically handles a lot of the more complex stuff out of the box:
+
+- General UI layout
+- [Routing](https://www.polymer-project.org/1.0/articles/routing)
+- [App shell caching](https://developers.google.com/web/updates/2015/11/app-shell?hl=en)
+
+Turns out this is *sort of* right. It does all those things, but customization is funky. The first thing I try to do is rename the first example view to a homepage. I grep through the project to find all instances of the first view and change it to `readme.html`.
+
+Errors all around.
+
+Long story short, the app-drawer-template uses a weird routing convention where your views are named '<x>' but all the files are named 'my-<x>'. Once I figure that out, the rest is trivial. At some point I'd like to go back and change that routing logic, but for now I'm just trying to get comfortable in my new home.
+
+## The target UI
+
+## Building the `<expandable-card>` element
+Looking through the Polymer [element catalog](https://elements.polymer-project.org/), my first thought is that the UI I have planned to show a talk is pretty similar to [paper-card](https://elements.polymer-project.org/elements/paper-card). There even looks like a nice expandable paper-card demo!
+
+Copy paste! Errors!
+
+- The example uses `document.getElementById()` which isn't available from within custom elements. A quick Google search solved this one - use Polymer [automatic node finding](https://www.polymer-project.org/1.0/docs/devguide/local-dom).
+- Automatic node finding (`this.$.<idName>`) doesn't work normally with dashed names. Another quick Google search - use `this.$[dashed-id]`.
+- `hardware:keyboard-arrow-up` doesn't exist. This is a problem I've had repeatedly with any of the [`iron-icon`](https://elements.polymer-project.org/elements/iron-icon) features in Polymer. I __never__ get it right. There's always some hidden package I have to import, or something that Bower didn't manage to download.
+- `onclick` event isn't getting called. tl;dr: you need to use [`on-tap`](https://www.polymer-project.org/1.0/docs/devguide/gesture-events) inside custom elements instead of `onclick`. I found this out with sheer dumb luck comparing to another project.
+
+I still don't understand why the Polymer example doesn't play nice inside custom elements. I get the feeling that those errors were supposed to be 'obvious', but that's only once you really know your way around, at which point you probably don't bother copying 10 line code examples...
+
+Now that I've got the demo working, let's style this bad boy. My first thought is to use all the nice pieces of the card structure, putting the talk title in the card header, the description in the card-content, and then the expandable portion in the card-actions. I hit two problems:
+
+- There was a bit of jitter when you expand from the card-actions
+- The mixin that allows styling of the card header is super opaque. It doesn't say what classes it operates on, how you can customize, etc.
+
+5 minutes into looking at the source code for paper-card I realize all value of reusing the element is lost if I'm digging this deep, so I throw everything into card-contents and style from there.
+
+Next problem, I want the entire card to expand when the user taps on it but I also want you to be able to hit the like button. Right now, the top level card gesture eats the like gesture as well.
+
+I end up moving the like button outside card-contents and absolute positioning it in the top right corner of the card. Still no dice. I think it's because the card-contents are still technically taking up the whole card container and overlay on the like button. I set the like button's `z-index` to 1 and everything works!
+
+## Using `@media` queries
+This next one was a doozy. I decide that I want to get fancy. On mobile screens, the talks should take up the full width of the screen, but on larger form factors I want them to fit into a grid.
+
+A quick Google search shows that the iPhone 6S+ has a width of 750 pixels, so I set the media query to that. I do some hemming and hawing and up the cut off to 900 pixels.
+
+Below 900 pixels, `width:100%` works great. Above, I set `width:50%`. Cool. 2 to a column.
+
+Errors.
+
+The cards look appropriately shrunk, but they're still showing 1 to a line. Playing around with devtools, I see that there's `10px` of padding set on the page container. Maybe that's it? CSS3 has a nifty [`calc()`](https://developer.mozilla.org/en-US/docs/Web/CSS/calc) function that lets you use percentages and then lop off a few pixels to account for things like padding. I found the solution to this problem pretty quickly. I'm getting the hang of this. I set `width: calc(50% - 10px)`, feeling smug.
+
+No dice.
+
+I sit down with __Paul Irish__ figuring he'll help me figure things out quickly. The first thing he does is point me at [`box-sizing: border-box`](http://www.paulirish.com/2012/box-sizing-border-box-ftw/) once he sees me using `calc()`. You see, the annoying thing about `width` is that it only takes into account the size of your content area, not border or padding, when you use percentages. This makes it really hard to say something like "no really, I just want this damn box to be 50% of the page" as well as "could my text please not be smooshed against the edges?".
+
+`box-sizing: border-box` fixes this by changing the behavior of width to calculate percentages based off of border + padding + content. Thank you Paul for pointing me at this awesome feature that makes sizing so much more rational all around! And also fixing my problem!
+
+Except the problem isn't fixed.
+
+We keep poking and eventually realize that even though the cards have no margin, there's a *tiiiiny* little space between them. And then Paul laughs a wise, world-weary laugh and tells me that if you use `display: inline-block` for an element, it will render any [whitespace that's in __your code__ between elements](https://css-tricks.com/fighting-the-space-between-inline-block-elements/). This is because `inline-block` is meant to be used for displaying inline things like text. The conclusion is that I'll have to use [`flexbox`](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes) to lay these bad boys out.
