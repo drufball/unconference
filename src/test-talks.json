@@ -1,0 +1,21 @@
+[
+    {
+        "title":"This is an example title",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.",
+        "likes":7,
+        "attendees":[],
+        "presenters":["rbyers","foolip"]
+    }, {
+        "title":"Sample title 2",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.",
+        "likes":0,
+        "attendees":[],
+        "presenters":["rbyers","foolip"]
+    }, {
+        "title":"Just one last sample title to show nothing to see here",
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.",
+        "likes":40,
+        "attendees":[],
+        "presenters":["rbyers","foolip"]
+    }
+]

@@ -1,0 +1,64 @@
+<!-- Dependencies -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+
+<dom-module id="unconference-app">
+
+  <template>
+
+    <style>
+
+
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+        route="{{route}}"
+        pattern="/:page"
+        data="{{routeData}}"
+        tail="{{subroute}}"></app-route>
+      <!-- Main content -->
+        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
+          <readme name="readme"></readme>
+        </iron-pages>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'unconference-app',
+
+      properties: {
+
+        page: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_pageChanged'
+        },
+
+      },
+
+      observers: [
+        '_routePageChanged(routeData.page)'
+      ],
+
+      _routePageChanged: function(page) {
+        this.page = page || 'readme';
+      },
+
+      _pageChanged: function(page) {
+        // load page import on demand.
+        this.importHref(
+          this.resolveUrl(page + '.html'), null, null, true);
+      }
+
+    });
+
+  </script>
+
+</dom-module>

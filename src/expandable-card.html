@@ -1,5 +1,4 @@
 <!-- Dependencies -->
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 
@@ -11,27 +10,14 @@
     <style>
         :host {
             display: block;
-            float: left;
-
-        }
-        html {
-          box-sizing: border-box;
-        }
-        *, *:before, *:after {
-          box-sizing: inherit;
-        }
-        paper-card {
-            position: relative;
-            margin: 10px 0;
+            box-sizing: border-box;
             width: 100%;
-            display:block;
+        }
+        #container {
+            position: relative;
+            width: 100%;
         }
         /* Sizing rules for different devices */
-        @media (max-width: 900px) {
-            :host {
-                width: 100%;
-            }
-        }
         @media (min-width: 901px) {
             :host {
                 width: 50%;
@@ -50,14 +36,14 @@
     </style>
 
     <!-- Element DOM -->
-    <paper-card class="white">
+    <div id="container">
         <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
         <div class="card-content" on-tap="toggle">
             <h1>Title Text</h1>
             <iron-collapse id="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent enim ante, tempus eget volutpat ac, cursus ac ante. Nulla facilisi. Praesent sed lacinia ligula. Donec malesuada nisl eget quam iaculis, vel placerat justo cursus.
             </iron-collapse>
         </div>
-    </paper-card>
+    </div>
 </template>
 
 <!-- Element declaration + script -->

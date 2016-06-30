@@ -1,0 +1,33 @@
+<!-- Dependencies -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="expandable-card.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="readme">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <iron-ajax url="test-talks.json" last-response="{{talks}}" auto></iron-ajax>
+    <iron-list items="[[talks]]" as="talk">
+        <template>
+            <div>Name: [[talk.title]]</div>
+        </template>
+    </iron-list>
+    </template>
+    <script>
+
+        Polymer({
+            is: 'readme'
+        });
+
+    </script>
+
+</dom-module>
