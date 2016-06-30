@@ -22,7 +22,7 @@
         tail="{{subroute}}"></app-route>
       <!-- Main content -->
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <readme name="readme"></readme>
+          <readme-page name="readme"></readme-page>
         </iron-pages>
 
   </template>
@@ -54,7 +54,7 @@
       _pageChanged: function(page) {
         // load page import on demand.
         this.importHref(
-          this.resolveUrl(page + '.html'), null, null, true);
+          this.resolveUrl(page + '-page.html'), null, null, true);
       }
 
     });
