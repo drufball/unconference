@@ -147,3 +147,10 @@ I sit down with __Paul Irish__ figuring he'll help me figure things out quickly.
 Except the problem isn't fixed.
 
 We keep poking and eventually realize that even though the cards have no margin, there's a *tiiiiny* little space between them. And then Paul laughs a wise, world-weary laugh and tells me that if you use `display: inline-block` for an element, it will render any [whitespace that's in __your code__ between elements](https://css-tricks.com/fighting-the-space-between-inline-block-elements/). This is because `inline-block` is meant to be used for displaying inline things like text. The conclusion is that I'll have to use [`flexbox`](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Using_CSS_flexible_boxes) to lay these bad boys out.
+
+## Flexbox
+So first, let me say this is the first section I'm actually writing as I work. The rest was playing catch up from memory. Any changes in tone and level of detail are likely due to that.
+
+First things first, I go into my `<expandable-card>` custom element and clean up all the various layout hacks I was trying to figure out my problem from the day before. Now everything is box with no margin. Should be nice and easy to layout.
+
+I read this pretty great [intro to flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/) and I'm getting excited. This seems like the promise of the web - flexible, powerful, and pretty clean.

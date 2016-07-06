@@ -1,0 +1,53 @@
+<!-- Dependencies -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="expandable-card.html">
+
+<dom-module id="talk-list">
+
+<!-- DOM + styling -->
+<template>
+    <!-- Element styling -->
+    <style>
+
+    </style>
+
+    <!-- Element DOM -->
+    <template is="dom-repeat" items="{{talks}}">
+        <expandable-card>
+            <div class="card-title">{{item.title}}</div>
+            <div class="card-description">{{item.description}}</div>
+        </expandable-card>
+    </template>
+</template>
+
+<!-- Element declaration + script -->
+<script>
+    Polymer({
+        is: 'talk-list',
+
+        properties: {
+            src: String,
+            talks: {
+                type: Array,
+                value: function() { return []; },
+                notify: true
+            }
+        },
+
+        factoryImpl: function(src) {
+            this.src = src;
+        },
+
+        ready: function() {
+            fetch(this.src)
+            .then(response => {
+                response.json()
+                .then(json => {
+                    this.talks = json;
+                    console.log(this.talks);
+                })
+            });
+        }
+    });
+</script>
+</dom-module>
