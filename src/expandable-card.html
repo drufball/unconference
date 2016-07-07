@@ -1,7 +1,7 @@
 <!-- Dependencies -->
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
-
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <dom-module id="expandable-card">
 
 <!-- DOM + styling -->
@@ -14,7 +14,6 @@
             width: 100%;
         }
         #container {
-            position: relative;
             box-sizing: inherit;
             width: 100%;
             border: solid 1px;
@@ -23,6 +22,9 @@
         .card-content {
             width: 100%;
             height: 100%;
+        }
+        h1 {
+            line-height: 1em;
         }
         ::content .card-title {
             white-space: nowrap;
@@ -33,25 +35,23 @@
         ::content .expand-title {
             white-space: normal;
         }
+
         /* Sizing rules for different devices */
         @media (min-width: 750px) {
             :host {
                 width: calc(50% - 20px);
-                margin: 0 10px;
+                margin: 10px;
             }
         }
         @media (min-width: 1200px) {
             :host {
                 width: calc(33% - 20px);
-                margin: 0 10px;
+                margin: 10px;
             }
         }
 
         #like-btn {
-            position: absolute;
-            right: 0;
-            top: 0;
-            z-index: 1;
+            float: right;
         }
         .liked {
             fill: red;
@@ -59,11 +59,12 @@
     </style>
 
     <!-- Element DOM -->
+    <iron-media-query query="(min-width: 750px)" query-matches="{{expand}}"></iron-media-query>
     <div id="container">
         <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
         <div class="card-content" on-tap="toggle">
             <h1><content id="title" select=".card-title"></content></h1>
-            <iron-collapse id="description"><content select=".card-description"></content>
+            <iron-collapse opened="[[expand]]" id="description"><content select=".card-description"></content>
             </iron-collapse>
         </div>
     </div>
@@ -73,12 +74,32 @@
 <script>
     Polymer({
         is: 'expandable-card',
+        properties: {
+            expand: {
+                type: Boolean,
+                value: false,
+                notify: true
+            }
+        },
+        listeners: {
+            'expand-changed': 'fixTitle'
+        },
 
         // Instance Methods
         toggle: function () {
-            this.$.description.toggle();
+            if(!this.expand) {
+                this.$.description.toggle();
+                var titleClasses = this.getContentChildren('#title')[0].classList;
+                titleClasses.toggle('expand-title');
+            }
+        },
+        fixTitle: function () {
             var titleClasses = this.getContentChildren('#title')[0].classList;
-            titleClasses.toggle('expand-title');
+            if(this.expand) {
+                titleClasses.add('expand-title');
+            } else {
+                titleClasses.remove('expand-title');
+            }
         },
 
         toggleLiked: function () {
@@ -90,7 +111,9 @@
                 likeBtn.className = "liked";
                 likeBtn.icon = "favorite";
             }
-        }
+        },
+
+
     });
 </script>
 </dom-module>
