@@ -18,15 +18,32 @@
             box-sizing: inherit;
             width: 100%;
             border: solid 1px;
+            padding: 10px;
         }
         .card-content {
             width: 100%;
             height: 100%;
         }
+        ::content .card-title {
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        ::content .expand-title {
+            white-space: normal;
+        }
         /* Sizing rules for different devices */
-        @media (min-width: 901px) {
+        @media (min-width: 750px) {
             :host {
-                width: 50%;
+                width: calc(50% - 20px);
+                margin: 0 10px;
+            }
+        }
+        @media (min-width: 1200px) {
+            :host {
+                width: calc(33% - 20px);
+                margin: 0 10px;
             }
         }
 
@@ -45,7 +62,7 @@
     <div id="container">
         <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
         <div class="card-content" on-tap="toggle">
-            <h1><content select=".card-title"></content></h1>
+            <h1><content id="title" select=".card-title"></content></h1>
             <iron-collapse id="description"><content select=".card-description"></content>
             </iron-collapse>
         </div>
@@ -60,10 +77,11 @@
         // Instance Methods
         toggle: function () {
             this.$.description.toggle();
+            var titleClasses = this.getContentChildren('#title')[0].classList;
+            titleClasses.toggle('expand-title');
         },
 
         toggleLiked: function () {
-            console.log("Like toggled");
             var likeBtn = this.$['like-btn'];
             if(likeBtn.className == "liked") {
                 likeBtn.className = "";

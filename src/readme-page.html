@@ -1,8 +1,5 @@
 <!-- Dependencies -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="expandable-card.html">
-<link rel="import" href="../bower_components/iron-list/iron-list.html">
-<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="talk-list.html">
 
 <dom-module id="readme-page">
@@ -17,15 +14,6 @@
     </style>
 
     <talk-list src="test-talks.json"></talk-list>
-    <!-- <iron-ajax url="test-talks.json" last-response="{{talks}}" auto></iron-ajax>
-    <iron-list items="[[talks]]" as="talk">
-        <template>
-            <expandable-card>
-                <span class="card-title">[[talk.title]]</span>
-                <span class="card-description">[[talk.description]]</span>
-            </expandable-card>
-        </template>
-    </iron-list> -->
     </template>
     <script>
 
