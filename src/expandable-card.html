@@ -28,12 +28,14 @@
         }
         ::content .card-title {
             white-space: nowrap;
-            width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         ::content .expand-title {
             white-space: normal;
+        }
+        #description {
+            padding-bottom: 20px;
         }
 
         /* Sizing rules for different devices */
@@ -52,6 +54,9 @@
 
         #like-btn {
             float: right;
+            padding: 20px 5px;
+            --iron-icon-height: 32px;
+            --iron-icon-width: 32px;
         }
         .liked {
             fill: red;
@@ -79,6 +84,10 @@
                 type: Boolean,
                 value: false,
                 notify: true
+            },
+            opened: {
+                type: Boolean,
+                value: false
             }
         },
         listeners: {
@@ -91,14 +100,17 @@
                 this.$.description.toggle();
                 var titleClasses = this.getContentChildren('#title')[0].classList;
                 titleClasses.toggle('expand-title');
+                this.opened = !this.opened;
             }
         },
         fixTitle: function () {
             var titleClasses = this.getContentChildren('#title')[0].classList;
             if(this.expand) {
                 titleClasses.add('expand-title');
-            } else {
+            } else if (!this.opened) {
                 titleClasses.remove('expand-title');
+            } else {
+                this.$.description.opened = this.opened;
             }
         },
 

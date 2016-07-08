@@ -10,8 +10,57 @@
   <template>
 
     <style>
+        :host {
+          display: flex;
+          flex-flow: column;
+          align-items: stretch;
+          height: 100vh;
+        }
+        #header, nav {
+            z-index: 1;
+            background-color: rgb(97, 8, 145);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            position: fixed;
+            width: 100%;
 
+            transition: top 0.5s;
 
+        }
+        #header {
+            top: 0px;
+            font-size: 2em;
+            height: 150px;
+        }
+        nav {
+            top: 150px;
+            height: 50px;
+            border-top: solid 1px rgb(67, 3, 101);
+        }
+        #header.collapse-header {
+            top: -150px !important;
+        }
+        nav.collapse-header {
+            top: 0px;
+        }
+        iron-pages.collapse-header {
+            margin-top: 50px;
+            height: calc(100% - 50px);
+        }
+        nav.collapse-navbar {
+            top: -51px;
+        }
+        iron-pages.collapse-navbar {
+            margin-top: 0px;
+            height: 100%;
+        }
+        iron-pages {
+            margin-top: 200px;
+            height: calc(100% - 200px);
+            overflow: scroll;
+            transition: margin-top 0.5s, height 0.5s;
+        }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -20,10 +69,18 @@
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
-      <!-- Main content -->
-        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <readme-page name="readme"></readme-page>
-        </iron-pages>
+    <!-- App shell -->
+    <div id="header">unconference.io</div>
+    <nav id="navbar">
+        <div>README</div>
+        <div>Talks</div>
+        <div>Schedule</div>
+    </nav>
+
+    <!-- Main content -->
+    <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
+        <readme-page name="readme"></readme-page>
+    </iron-pages>
 
   </template>
 
@@ -36,10 +93,21 @@
       properties: {
 
         page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged'
         },
+
+        animating: {
+            type: Boolean,
+            value: false
+        },
+
+        lastScrollTop: {
+            type: Number,
+            value: 0
+        },
+
 
       },
 
@@ -55,8 +123,45 @@
         // load page import on demand.
         this.importHref(
           this.resolveUrl(page + '-page.html'), null, null, true);
-      }
+      },
+      _handleScroll: function(e) {
+          // Get dy to tell is scroll was up or down and how far
+          var dy = e.target.scrollTop - this.lastScrollTop;
+          this.lastScrollTop = e.target.scrollTop;
 
+          // Figure out distance from bottom to avoid jitter
+          var remaining = e.target.scrollHeight - (e.target.scrollTop + e.target.offsetHeight);
+
+          // Get all the elements to work with
+          var headerClasses = this.$.header.classList;
+          var navbarClasses = this.$.navbar.classList;
+          var mainClasses = this.$.main.classList;
+
+          if(!headerClasses.contains('collapse-header') && e.target.scrollTop >= 150 && dy > 0) {
+              headerClasses.add('collapse-header');
+              navbarClasses.add('collapse-header');
+              mainClasses.add('collapse-header');
+              this.lastScrollTop = 0;
+              this.animating = true;
+              this.async(this._throttleScroll, 500);
+          }
+          if(e.target.scrollTop == 0 && dy < 0) {
+              headerClasses.remove('collapse-header');
+              navbarClasses.remove('collapse-header');
+              mainClasses.remove('collapse-header');
+          }
+          if(headerClasses.contains('collapse-header') && dy > 2 && e.target.scrollTop > 50 && !this.animating && remaining > 50) {
+              navbarClasses.add('collapse-navbar');
+              mainClasses.add('collapse-navbar');
+          }
+          if(navbarClasses.contains('collapse-navbar') && dy < -2 && remaining > 0) {
+              navbarClasses.remove('collapse-navbar');
+              mainClasses.remove('collapse-navbar');
+          }
+      },
+      _throttleScroll: function() {
+          this.animating = false;
+      }
     });
 
   </script>
