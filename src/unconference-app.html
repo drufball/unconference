@@ -130,6 +130,8 @@
         this.importHref(
           this.resolveUrl(page + '-page.html'), null, null, true);
       },
+
+      // Scroll animation for expanding/collapsing header
       _handleScroll: function(e) {
           // Get dy to tell is scroll was up or down and how far
           var dy = e.target.scrollTop - this.lastScrollTop;
