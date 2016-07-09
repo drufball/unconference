@@ -1,0 +1,74 @@
+<!-- Dependencies -->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="nav-bar">
+
+<!-- DOM + styling -->
+<template>
+    <!-- Element styling -->
+    <style>
+        :host {
+            background-color: var(--nav-bar-background, rgb(97, 8, 145));
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        ::content .selected {
+            border-bottom: solid white 2px;
+        }
+
+        ::content a:visited {
+            color: white;
+        }
+
+    </style>
+
+    <!-- Element DOM -->
+    <content></content>
+</template>
+
+<!-- Element declaration + script -->
+<script>
+    Polymer({
+        is: 'nav-bar',
+
+        properties: {
+            selected: {
+                type: String,
+                value: "",
+                notify: true,
+                reflectToAttribute: true
+            }
+        },
+
+        listeners: {
+            'selected-changed':'highlightSelected'
+        },
+
+        ready: function() {
+            this.getContentChildren().forEach((div, index, children) => {
+                if(div.attributes.name.value == this.selected) {
+                    div.classList.add('selected');
+                }
+                this.listen(div, 'tap', 'select');
+            });
+        },
+
+        select: function(e) {
+            this.selected = e.target.attributes.name.value;
+            this.highlightSelected();
+        },
+        highlightSelected: function() {
+            this.getContentChildren().forEach((div, index, children) => {
+                if(div.attributes.name.value == this.selected) {
+                    div.classList.add('selected');
+                } else {
+                    div.classList.remove('selected');
+                }
+            });
+        }
+    });
+</script>
+</dom-module>

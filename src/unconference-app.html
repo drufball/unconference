@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="nav-bar.html">
 
 <dom-module id="unconference-app">
 
@@ -16,24 +17,23 @@
           align-items: stretch;
           height: 100vh;
         }
-        #header, nav {
+        #header, nav-bar {
             z-index: 1;
-            background-color: rgb(97, 8, 145);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
             position: fixed;
-            width: 100%;
-
             transition: top 0.5s;
 
         }
         #header {
+            background-color: rgb(97, 8, 145);
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
             top: 0px;
             font-size: 2em;
             height: 150px;
         }
-        nav {
+        nav-bar {
             top: 150px;
             height: 50px;
             border-top: solid 1px rgb(67, 3, 101);
@@ -41,14 +41,14 @@
         #header.collapse-header {
             top: -150px !important;
         }
-        nav.collapse-header {
+        nav-bar.collapse-header {
             top: 0px;
         }
         iron-pages.collapse-header {
             margin-top: 50px;
             height: calc(100% - 50px);
         }
-        nav.collapse-navbar {
+        nav-bar.collapse-navbar {
             top: -51px;
         }
         iron-pages.collapse-navbar {
@@ -71,15 +71,17 @@
         tail="{{subroute}}"></app-route>
     <!-- App shell -->
     <div id="header">unconference.io</div>
-    <nav id="navbar">
-        <div>README</div>
-        <div>Talks</div>
-        <div>Schedule</div>
-    </nav>
+    <nav-bar id="navbar" selected="[[page]]">
+        <a href="/readme" name="readme">README</a>
+        <a href="/talks" name="talks">Talks</a>
+        <a href="/schedule" name="schedule">Schedule</a>
+    </nav-bar>
 
     <!-- Main content -->
     <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
         <readme-page name="readme"></readme-page>
+        <talks-page name="talks"></talks-page>
+        <schedule-page name="schedule"></schedule-page>
     </iron-pages>
 
   </template>
@@ -121,6 +123,10 @@
 
       _pageChanged: function(page) {
         // load page import on demand.
+        if(this.routeData != page) {
+
+            this.route.path = "/" + page;
+        }
         this.importHref(
           this.resolveUrl(page + '-page.html'), null, null, true);
       },
