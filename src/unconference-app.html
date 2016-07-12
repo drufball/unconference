@@ -21,7 +21,7 @@
             z-index: 1;
             position: fixed;
             transition: top 0.5s;
-
+            color: white;
         }
         #header {
             background-color: rgb(97, 8, 145);
@@ -64,11 +64,17 @@
     </style>
 
     <app-location route="{{route}}"></app-location>
+    <!-- Main route for page navigation -->
     <app-route
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+    <!-- Route for controlling the add talks page -->
+    <app-route route="{{route}}"
+               pattern="/talks"
+               tail="{{talksRoute}}"></app-route>
+
     <!-- App shell -->
     <div id="header">unconference.io</div>
     <nav-bar id="navbar" selected="[[page]]">
@@ -80,7 +86,7 @@
     <!-- Main content -->
     <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
         <readme-page name="readme"></readme-page>
-        <talks-page name="talks"></talks-page>
+        <talks-page route="{{talksRoute}}" name="talks"></talks-page>
         <schedule-page name="schedule"></schedule-page>
     </iron-pages>
 

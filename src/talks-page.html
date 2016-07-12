@@ -1,6 +1,12 @@
 <!-- Dependencies -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="talk-list.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="talks-page">
 
@@ -8,11 +14,70 @@
 <template>
     <!-- Element styling -->
     <style>
+        paper-fab {
+            position: fixed;
+            bottom: 20px;
+            right:20px;
+            --paper-fab-background: rgb(97, 8, 145);
+            color: white;
+        }
+
+        #newTalkData {
+            width: 100%;
+            padding: 2% 5%;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        paper-input, paper-textarea {
+            width: 100%;
+            max-width: 700px;
+            --paper-input-container-color: rgb(64, 63, 65);
+            --paper-input-container-focus-color: rgb(97, 8, 145);
+        }
+        #btnHolder {
+            padding-top: 30px;
+            width: 100%;
+            max-width: 700px;
+        }
+        paper-button#submit {
+            background: rgb(97, 8, 145);
+            color: white;
+            float: right;
+        }
+        paper-button#cancel {
+            float: right;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
     </style>
 
+    <app-route
+        route="{{route}}"
+        pattern="/add"
+        active="{{addTalkActive}}"></app-route>
     <!-- Element DOM -->
-    <talk-list src="test-talks.json"></talk-list>
+    <template is="dom-if" if="{{!addTalkActive}}">
+        <talk-list src="test-talks.json"></talk-list>
+        <!-- Add a new talk -->
+        <a href="/talks/add"><paper-fab icon="add"></paper-fab></a>
+    </template>
+    <template is="dom-if" if="{{addTalkActive}}">
+        <div id="newTalkData">
+            <paper-input label="Title"></paper-input>
+            <paper-input label="Presenters"></paper-input>
+            <paper-textarea label="Talk description"></paper-textarea>
+            <div id="btnHolder">
+                <paper-button raised id="submit">Submit</paper-button>
+                <paper-button raised id="cancel"><a href="/talks">Cancel</a></paper-button>
+            </div>
+        </div>
+    </template>
+
 </template>
 
 <!-- Element declaration + script -->
@@ -21,7 +86,15 @@
         is: 'talks-page',
 
         properties: {
-
+            addTalkActive: {
+                type: Boolean,
+                value: false,
+                notify: true
+            },
+            route: {
+                type: Object,
+                notify: true
+            }
         }
     });
 </script>
