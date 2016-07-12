@@ -1,7 +1,7 @@
 {
-  "name": "app-drawer-template",
+  "name": "unconference-app",
   "authors": [
-    "The Polymer Authors"
+    "Dru Knox"
   ],
   "private": true,
   "dependencies": {

@@ -1,0 +1,29 @@
+{
+  "name": "unconference",
+  "version": "1.0.0",
+  "description": "Unconference app for blinkons",
+  "main": "index.html",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "marked": "^0.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drufball/unconference.git"
+  },
+  "keywords": [
+    "unconference"
+  ],
+  "author": "Dru Knox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drufball/unconference/issues"
+  },
+  "homepage": "https://github.com/drufball/unconference#readme"
+}
