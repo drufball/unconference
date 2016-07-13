@@ -25,7 +25,8 @@
     "iron-scroll-threshold": "PolymerElements/iron-scroll-threshold#^1.0.1",
     "paper-fab": "PolymerElements/paper-fab#^1.2.0",
     "paper-input": "PolymerElements/paper-input#^1.1.14",
-    "paper-button": "PolymerElements/paper-button#^1.0.12"
+    "paper-button": "PolymerElements/paper-button#^1.0.12",
+    "gold-cc-input": "PolymerElements/gold-cc-input#^1.0.7"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

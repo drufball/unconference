@@ -4,7 +4,7 @@ var path = require('path');
 var app = express();
 
 app.use('/src', express.static('src'));
-app.use('/bower_components', express.static('bower_components'));
+app.use('/polymer', express.static('polymer'));
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
