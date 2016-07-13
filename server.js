@@ -16,6 +16,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(process.env.PORT, function() {
-    console.log("listening on " + process.env.PORT);
+app.listen(80, function() {
+    console.log("listening on " + 80);
 });
