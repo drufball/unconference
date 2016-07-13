@@ -2,7 +2,6 @@
   "name": "unconference",
   "version": "1.0.0",
   "description": "Unconference app for blinkons",
-  "main": "index.html",
   "directories": {
     "test": "test"
   },
