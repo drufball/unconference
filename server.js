@@ -1,21 +1,40 @@
+'use strict';
+
+var LEX = require('letsencrypt-express').testing();
+var DOMAIN = 'unconference.io';
+var EMAIL = 'dknox@google.com';
+var lex = LEX.create({
+    configDir: require('os').homedir() + '/letsencrypt/etc',
+    approveRegistration: function(hostname, approve) {
+        if(hostname === DOMAIN) {
+            approve(null, {
+                domains: [DOMAIN],
+                email: EMAIL,
+                agreeTos: true
+            });
+        }
+    }
+});
+
 var express = require('express');
 var path = require('path');
 
 var app = express();
 
-console.log("SERVER IS FUCKING RUNNING");
-
 app.use('/src', express.static('src'));
 app.use('/polymer', express.static('polymer'));
 
-app.get('/health', (req, res) => {
-    res.sendStatus(200);
-});
-
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.listen(80, function() {
-    console.log("listening on " + 80);
+lex.onRequest = app;
+lex.listen([80], [443, 5001], function () {
+    var protocol = ('requestCert' in this) ? 'https': 'http';
+    console.log(protocol + '://localhost:' + this.address().port);
 });
+
+
+// app.listen(80, function() {
+//     console.log("listening on " + 80);
+// });
