@@ -1,12 +1,18 @@
 'use strict';
 
-var LEX = require('letsencrypt-express').testing();
+if(process.env.PROD === "true") { // production deployment
+    var LEX = require('letsencrypt-express').testing();
+} else { // dev deployment
+    var LEX = require('letsencrypt-express').testing();
+}
+
 var DOMAIN = 'unconference.io';
 var EMAIL = 'dknox@google.com';
+
 var lex = LEX.create({
     configDir: require('os').homedir() + '/letsencrypt/etc',
     approveRegistration: function(hostname, approve) {
-        if(hostname === DOMAIN) {
+        if(hostname === DOMAIN || hostname === 'localhost') {
             approve(null, {
                 domains: [DOMAIN],
                 email: EMAIL,
@@ -29,12 +35,7 @@ app.get('*', (req, res) => {
 });
 
 lex.onRequest = app;
+
 lex.listen([80], [443, 5001], function () {
     var protocol = ('requestCert' in this) ? 'https': 'http';
-    console.log(protocol + '://localhost:' + this.address().port);
 });
-
-
-// app.listen(80, function() {
-//     console.log("listening on " + 80);
-// });
