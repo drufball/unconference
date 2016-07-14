@@ -2,7 +2,7 @@
 
 if(process.env.PROD === "true") { // production deployment
     console.log("Production deployment detected...");
-    var LEX = require('letsencrypt-express').testing();
+    var LEX = require('letsencrypt-express');
 } else { // dev deployment
     console.log("Dev deployment detected");
     var LEX = require('letsencrypt-express').testing();
