@@ -22,6 +22,7 @@ var lex = LEX.create({
                 agreeTos: true
             });
         }
+        console.log("approving");
     }
 });
 
