@@ -11,6 +11,7 @@ if(process.env.PROD === "true") { // production deployment
 var DOMAIN = 'unconference.io';
 var EMAIL = 'dknox@google.com';
 
+console.log('Will use ' + require('os').homedir() + '/letsencrypt/etc for cert');
 var lex = LEX.create({
     configDir: require('os').homedir() + '/letsencrypt/etc',
     approveRegistration: function(hostname, approve) {
