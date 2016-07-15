@@ -6,19 +6,44 @@
   <template>
 
     <style>
-
+        :host {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+        }
+        :host div {
+            padding: 2% 5%;
+            text-align: justify;
+            max-width: 700px;
+        }
     </style>
 
     <!-- Element DOM -->
-    <h1>This is the readme - does the deploy script work?</h1>
+    <div id="readmeContent"></div>
     </template>
     <script>
 
         Polymer({
             is: 'readme-page',
 
-            ready: function() {
+            properties: {
+                readmeContent: {
+                    type: String,
+                    value: "",
+                    notify: true
+                }
+            },
 
+            ready: function() {
+                fetch('../readme-content')
+                .then(response => {
+                    response.text()
+                    .then(content => {
+                        console.log(this.$.readmeContent.innerHTML);
+                        this.$.readmeContent.innerHTML = new DOMParser().parseFromString(content, 'text/xml').firstChild.innerHTML;
+                        console.log(new DOMParser().parseFromString(content, 'text/xml').firstChild.innerHTML);
+                    })
+                });
             }
         });
 
