@@ -57,7 +57,13 @@
             .then(response => {
                 response.json()
                 .then(json => {
-                    this.talks = json;
+                    var talk_data = json.rows;
+                    console.log(talk_data);
+                    talk_data.forEach((element, index, array) => {
+                        talk_data[index] = element.doc;
+                    })
+                    console.log(talk_data);
+                    this.talks = talk_data;
                 })
             });
         }

@@ -62,7 +62,7 @@
         active="{{addTalkActive}}"></app-route>
     <!-- Element DOM -->
     <template is="dom-if" if="{{!addTalkActive}}">
-        <talk-list src="test-talks.json"></talk-list>
+        <talk-list src="../talks/all"></talk-list>
         <!-- Add a new talk -->
         <a href="/talks/add"><paper-fab icon="add"></paper-fab></a>
     </template>
