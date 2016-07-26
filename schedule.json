@@ -1,0 +1,26 @@
+{
+    "rooms": [
+        {"name":"MUC-ARP-Moonshot", "capacity":200},
+        {"name":"MUC-ARP-10X", "capacity":50},
+        {"name":"MTV-43-Dapaong", "capacity":10}
+    ],
+    "slots": [
+        {"time":"10am", "duration":45, "break":false},
+        {"time":"10:45am", "duration":15, "break":true},
+        {"time":"11am", "duration":45, "break":false},
+        {"time":"11:45am", "duration":15, "break":true},
+        {"time":"12pm", "duration":60, "break":true}
+    ],
+    "talks": {
+        "10am": [
+            {"title":"Platform Predictability", "presenter":"Rick Byers"},
+            {"title":"Async append", "presenter":"Dru Knox"},
+            {"title":"Current state of storage", "presenter":"Josh Bell"}
+        ],
+        "11am": [
+            {"title":"Platform Predictability", "presenter":"Rick Byers"},
+            {"title":"Async append", "presenter":"Dru Knox"},
+            {"title":"Current state of storage", "presenter":"Josh Bell"}
+        ]
+    }
+}

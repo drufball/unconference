@@ -68,11 +68,11 @@
     </template>
     <template is="dom-if" if="{{addTalkActive}}">
         <div id="newTalkData">
-            <paper-input label="Title"></paper-input>
-            <paper-input label="Presenters"></paper-input>
-            <paper-textarea label="Talk description"></paper-textarea>
+            <paper-input label="Title" id="title">blah</paper-input>
+            <paper-input label="Presenters" id="presenters"></paper-input>
+            <paper-textarea label="Talk description" id="description"></paper-textarea>
             <div id="btnHolder">
-                <paper-button raised id="submit">Submit</paper-button>
+                <paper-button raised id="submit" on-tap="submit"><a href="/talks">Submit</a></paper-button>
                 <paper-button raised id="cancel"><a href="/talks">Cancel</a></paper-button>
             </div>
         </div>
@@ -86,6 +86,11 @@
         is: 'talks-page',
 
         properties: {
+            title: {
+                type: String,
+                value:"Blah",
+                notify:true
+            },
             addTalkActive: {
                 type: Boolean,
                 value: false,
@@ -95,6 +100,33 @@
                 type: Object,
                 notify: true
             }
+        },
+
+        submit: function() {
+            var data = {};
+            data.title = this.$$('#title').value;
+            var presenter_array = this.$$('#presenters').value.split(',');
+            presenter_array.forEach((element, index, array) => {
+                array[index] = array[index].trim();
+            })
+            data.presenters = presenter_array;
+            data.description = this.$$('#description').value;
+            data.likes = [];
+
+            // Create an empty Headers instance
+            var headers = new Headers();
+
+            // Add a few headers
+            headers.append('Content-Type', 'application/json');
+
+            fetch('../talks/add', {
+                'headers': headers,
+                'method': 'post',
+                'body': JSON.stringify(data)
+            })
+            .then(response => {
+                return true;
+            })
         }
     });
 </script>

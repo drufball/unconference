@@ -39,9 +39,7 @@
                 .then(response => {
                     response.text()
                     .then(content => {
-                        console.log(this.$.readmeContent.innerHTML);
                         this.$.readmeContent.innerHTML = new DOMParser().parseFromString(content, 'text/xml').firstChild.innerHTML;
-                        console.log(new DOMParser().parseFromString(content, 'text/xml').firstChild.innerHTML);
                     })
                 });
             }

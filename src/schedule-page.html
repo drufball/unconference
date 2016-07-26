@@ -11,7 +11,38 @@
     </style>
 
     <!-- Element DOM -->
-    <h1>This is the schedule</h1>
+    <table>
+        <!-- Headers -->
+        <tr>
+            <th>Time</th>
+            <template is="dom-repeat" items="{{schedule.rooms}}" as="room">
+                <th>
+                    <div>{{room.name}}</div>
+                    <div>{{room.capacity}}</div>
+                </th>
+            </template>
+        </tr>
+
+        <!-- Schedule -->
+        <template is="dom-repeat" items="{{schedule.slots}}" as="slot">
+            <tr>
+                <td>
+                    <div>{{slot.time}}</div>
+                    <div>{{slot.duration}}</div>
+                </td>
+                <template is="dom-if" if="{{!slot.break}}">
+                    <template is="dom-repeat" items="[[getTalks(slot.time)]]" as="talk">
+                        <td>{{talk.title}}</td>
+                    </template>
+                </template>
+                <template is="dom-if" if="{{slot.break}}">
+                    <td colspan="3">Break</td>
+                </template>
+            <tr>
+        </template>
+
+
+    </table>
 </template>
 
 <!-- Element declaration + script -->
@@ -20,7 +51,25 @@
         is: 'schedule-page',
 
         properties: {
+            schedule: {
+                type: Object,
+                notify: true,
+                value: function() { return {}; }
+            }
+        },
 
+        ready: function() {
+            fetch('../schedule-content')
+            .then(response => {
+                response.json()
+                .then(content => {
+                    this.schedule = content;
+                });
+            });
+        },
+
+        getTalks: function(time) {
+            return this.schedule.talks[time];
         }
     });
 </script>
