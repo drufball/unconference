@@ -101,6 +101,14 @@ app.get('/talks/:talk', (req, res) => {
         res.send(error);
     });
 });
+app.post('/user/add', (req, res) => {
+    add_user(req.body)
+    .then(result => {
+        res.status(201).send(result);
+    }).catch(error => {
+        res.status(500).send(error);
+    });
+});
 
 app.get('/readme-content', (req, res) => {
     var readline = require('readline');
