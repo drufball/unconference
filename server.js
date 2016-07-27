@@ -40,6 +40,7 @@ app.use('/db', require('express-pouchdb')(PouchDB));
 
 // Databases
 var talkdb = new PouchDB('talks');
+var userdb = new PouchDB('users');
 
 app.use('/src', express.static('src'));
 app.use('/polymer', express.static('polymer'));
@@ -72,6 +73,11 @@ function get_talks(limit) {
         else {
             reject("Single access not yet supported");
         }
+    });
+}
+function add_user(username) {
+    return new Promise((fulfill, reject) => {
+        fulfill("dummy code for now");
     });
 }
 

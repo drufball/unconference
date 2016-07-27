@@ -24,7 +24,7 @@
 
     <!-- Element DOM -->
     <template is="dom-repeat" items="{{talks}}">
-        <expandable-card>
+        <expandable-card doc-id="{{item._id}}">
             <div class="card-title">{{item.title}}</div>
             <div class="card-description">{{item.description}}</div>
         </expandable-card>
@@ -44,10 +44,6 @@
             }
         },
 
-        loadMoreData: function() {
-            console.log("Bottom reached, loading more data");
-        },
-
         factoryImpl: function(src) {
             this.src = src;
         },
@@ -58,11 +54,9 @@
                 response.json()
                 .then(json => {
                     var talk_data = json.rows;
-                    console.log(talk_data);
                     talk_data.forEach((element, index, array) => {
                         talk_data[index] = element.doc;
-                    })
-                    console.log(talk_data);
+                    });
                     this.talks = talk_data;
                 })
             });
