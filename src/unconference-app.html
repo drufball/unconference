@@ -5,6 +5,8 @@
 <link rel="import" href="../polymer/iron-pages/iron-pages.html">
 <link rel="import" href="../polymer/iron-selector/iron-selector.html">
 <link rel="import" href="nav-bar.html">
+<link rel="import" href="../polymer/paper-input/paper-input.html">
+<link rel="import" href="../polymer/paper-button/paper-button.html">
 
 <dom-module id="unconference-app">
 
@@ -65,6 +67,22 @@
             overflow: scroll;
             transition: margin-top 0.5s, height 0.5s;
         }
+        #login-form {
+            margin-top: 200px;
+            width: 100%;
+            padding: 2% 5%;
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        paper-input {
+            text-align: center;
+        }
+        paper-button {
+            background: rgb(97, 8, 145);
+            color:white;
+        }
     </style>
 
     <app-location route="{{route}}"></app-location>
@@ -81,18 +99,28 @@
 
     <!-- App shell -->
     <div id="header">unconference.io</div>
-    <nav-bar id="navbar" selected="[[page]]">
-        <a href="/readme" name="readme">README</a>
-        <a href="/talks" name="talks">Talks</a>
-        <a href="/schedule" name="schedule">Schedule</a>
-    </nav-bar>
+    <template is="dom-if" if="{{user}}">
+        <nav-bar id="navbar" selected="[[page]]">
+            <a href="/readme" name="readme">README</a>
+            <a href="/talks" name="talks">Talks</a>
+            <a href="/schedule" name="schedule">Schedule</a>
+        </nav-bar>
+    </template>
 
     <!-- Main content -->
-    <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
-        <readme-page name="readme"></readme-page>
-        <talks-page route="{{talksRoute}}" name="talks"></talks-page>
-        <schedule-page name="schedule"></schedule-page>
-    </iron-pages>
+    <template is="dom-if" if="{{user}}">
+        <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
+                <readme-page name="readme"></readme-page>
+                <talks-page route="{{talksRoute}}" name="talks"></talks-page>
+                <schedule-page name="schedule"></schedule-page>
+        </iron-pages>
+    </template>
+    <template is="dom-if" if="{{!user}}">
+        <div id="login-form">
+            <paper-input label="Username" id="username"></paper-input>
+            <paper-button raised id="login" on-tap="login">Login</paper-button>
+        </div>
+    </template>
 
   </template>
 
@@ -108,6 +136,12 @@
             type: String,
             reflectToAttribute: true,
             observer: '_pageChanged'
+        },
+
+        user: {
+            type: String,
+            value: "",
+            notify: true
         },
 
         animating: {
@@ -141,6 +175,37 @@
           this.resolveUrl(page + '-page.html'), null, null, true);
       },
 
+      // Login
+      login: function() {
+          var data = {};
+          data.username = this.$$('#username').value;
+
+          // Create an empty Headers instance
+          var headers = new Headers();
+
+          // Add a few headers
+          headers.append('Content-Type', 'application/json');
+
+          fetch('../user/add', {
+              'headers': headers,
+              'method': 'post',
+              'body': JSON.stringify(data)
+          })
+          .then(response => {
+              if(response.ok) {
+                  response.json()
+                  .then(json => {
+                      console.log(json);
+                      this.user = json.id;
+                      console.log("Logged in with ID: " + this.user);
+                  });
+              }
+              else {
+                  console.log("Failed to add user");
+              }
+          })
+      },
+
       // Scroll animation for expanding/collapsing header
       _handleScroll: function(e) {
           // Get dy to tell is scroll was up or down and how far
@@ -152,8 +217,8 @@
 
           // Get all the elements to work with
           var headerClasses = this.$.header.classList;
-          var navbarClasses = this.$.navbar.classList;
-          var mainClasses = this.$.main.classList;
+          var navbarClasses = this.$$('#navbar').classList;
+          var mainClasses = this.$$('#main').classList;
 
           if(!headerClasses.contains('collapse-header') && e.target.scrollTop >= 150 && dy > 0) {
               headerClasses.add('collapse-header');

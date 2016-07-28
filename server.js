@@ -48,9 +48,7 @@ app.use('/polymer', express.static('polymer'));
 // Database helpers
 function add_talk(data) {
     return new Promise((fulfill, refect) => {
-        console.log("before parse - " + data.title);
         talkdb.post(data).then(response => {
-            console.log("made it");
             fulfill(response);
         }).catch(error => {
             reject(error);
@@ -75,9 +73,13 @@ function get_talks(limit) {
         }
     });
 }
-function add_user(username) {
+function add_user(data) {
     return new Promise((fulfill, reject) => {
-        fulfill("dummy code for now");
+        userdb.post(data).then(response => {
+            fulfill(response);
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
