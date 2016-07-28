@@ -7,6 +7,7 @@
 <link rel="import" href="nav-bar.html">
 <link rel="import" href="../polymer/paper-input/paper-input.html">
 <link rel="import" href="../polymer/paper-button/paper-button.html">
+<link rel="import" href="../polymer/iron-localstorage/iron-localstorage.html">
 
 <dom-module id="unconference-app">
 
@@ -99,7 +100,7 @@
 
     <!-- App shell -->
     <div id="header">unconference.io</div>
-    <template is="dom-if" if="{{user}}">
+    <template is="dom-if" if="{{user.id}}">
         <nav-bar id="navbar" selected="[[page]]">
             <a href="/readme" name="readme">README</a>
             <a href="/talks" name="talks">Talks</a>
@@ -108,14 +109,18 @@
     </template>
 
     <!-- Main content -->
-    <template is="dom-if" if="{{user}}">
+    <iron-localstorage name="user-id"
+                       value="{{user}}"
+                       on-iron-localstorage-load-empty="initls">
+    </iron-localstorage>
+    <template is="dom-if" if="{{user.id}}">
         <iron-pages on-scroll="_handleScroll" role="main" selected="[[page]]" attr-for-selected="name" id="main">
                 <readme-page name="readme"></readme-page>
                 <talks-page route="{{talksRoute}}" name="talks"></talks-page>
                 <schedule-page name="schedule"></schedule-page>
         </iron-pages>
     </template>
-    <template is="dom-if" if="{{!user}}">
+    <template is="dom-if" if="{{!user.id}}">
         <div id="login-form">
             <paper-input label="Username" id="username"></paper-input>
             <paper-button raised id="login" on-tap="login">Login</paper-button>
@@ -139,8 +144,8 @@
         },
 
         user: {
-            type: String,
-            value: "",
+            type: Object,
+            value: function() { return {}; },
             notify: true
         },
 
@@ -176,6 +181,13 @@
       },
 
       // Login
+      initls: function(ev) {
+          this.user = {
+              "username":"",
+              "id":""
+          }
+          console.log(this.user);
+      },
       login: function() {
           var data = {};
           data.username = this.$$('#username').value;
@@ -195,9 +207,8 @@
               if(response.ok) {
                   response.json()
                   .then(json => {
-                      console.log(json);
-                      this.user = json.id;
-                      console.log("Logged in with ID: " + this.user);
+                      this.set('user.id', json.id);
+                      console.log("Logged in with ID: " + this.user.id);
                   });
               }
               else {
