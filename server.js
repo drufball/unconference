@@ -95,6 +95,21 @@ app.post('/talks/add', (req, res) => {
         res.status(500).send(error);
     });
 });
+app.post('/talks/update', (req, res) => {
+    if(req.body) {
+        console.log("Updating a document");
+        console.log(req.body);
+        talkdb.put(req.body)
+        .then(response => {
+            res.status(201).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        });
+    } else {
+        console.log("no body specified");
+    }
+});
 app.get('/talks/:talk', (req, res) => {
     get_talks(req.params.talk)
     .then(result => {

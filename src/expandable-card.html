@@ -71,7 +71,12 @@
     </iron-localstorage>
     <iron-media-query query="(min-width: 750px)" query-matches="{{expand}}"></iron-media-query>
     <div id="container">
-        <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
+        <template is="dom-if" if="{{!liked}}">
+            <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
+        </template>
+        <template is="dom-if" if="{{liked}}">
+            <iron-icon id="like-btn" class="liked" on-tap="toggleLiked" icon="favorite"></iron-icon>
+        </template>
         <div class="card-content" on-tap="toggle">
             <h1><content id="title" select=".card-title"></content></h1>
             <iron-collapse opened="[[expand]]" id="description"><content select=".card-description"></content>
@@ -101,7 +106,12 @@
             },
             doc: {
                 type: Object,
+                value: function() { return {}; },
                 notify: true
+            },
+            liked: {
+                type: Boolean,
+                computed: 'isLiked(doc.likes, user.id)'
             }
         },
         listeners: {
@@ -109,8 +119,10 @@
         },
 
         // Instance Methods
+        isLiked: function(likes, id) {
+            return likes.includes(id);
+        },
         toggle: function () {
-            console.log("My ID is " + this.docId + " and I'm toggling!");
             if(!this.expand) {
                 this.$.description.toggle();
                 var titleClasses = this.getContentChildren('#title')[0].classList;
@@ -130,15 +142,36 @@
         },
 
         toggleLiked: function () {
-            console.log(this.doc);
             var likeBtn = this.$['like-btn'];
-            if(likeBtn.className == "liked") {
-                likeBtn.className = "";
-                likeBtn.icon = "favorite-border";
+            if(this.liked) {
+                // Update Model
+                var id_index = this.doc.likes.indexOf(this.user.id);
+                this.doc.likes.splice(id_index, 1);
+                // Polymer only notifies when a completely new element is formed. Ugh.
+                this.doc.likes = this.doc.likes.slice(0);
+                this.notifyPath('doc.likes', this.doc.likes);
             } else {
-                likeBtn.className = "liked";
-                likeBtn.icon = "favorite";
+                // Update Model
+                this.doc.likes.push(this.user.id);
+                // Polymer only notifies when a completely new element is formed. Ugh.
+                this.doc.likes = this.doc.likes.slice(0);
+                this.notifyPath('doc.likes', this.doc.likes);
             }
+            // Update the doc on the remote server
+            // Create an empty Headers instance
+            var headers = new Headers();
+
+            // Add a few headers
+            headers.append('Content-Type', 'application/json');
+
+            fetch('../talks/update', {
+                'headers': headers,
+                'method': 'post',
+                'body': JSON.stringify(this.doc)
+            })
+            .then(response => {
+                console.log(response);
+            })
         },
 
 
