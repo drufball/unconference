@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 
 // Database setup
 var PouchDB = require('pouchdb');
-PouchDB.plugin(require('pouchdb-load'));
+PouchDB.plugin(require('pouchdb-find'));
 app.use('/db', require('express-pouchdb')(PouchDB));
 
 // Databases
@@ -75,10 +75,38 @@ function get_talks(limit) {
 }
 function add_user(data) {
     return new Promise((fulfill, reject) => {
-        userdb.post(data).then(response => {
-            fulfill(response);
-        }).catch(error => {
-            reject(error);
+        console.log("adding user: " + data.username);
+        userdb.createIndex({
+            index: {
+                fields: ['username']
+            }
+        })
+        .then(result => {
+            userdb.find({
+                selector: { username:data.username }
+            })
+            .then(result => {
+                if(result.docs.length > 0) {
+                    console.log("existing user");
+                    var response = {}
+                    response.ok = true;
+                    response.id = result.docs[0]._id;
+                    response.rev = result.docs[0]._rev;
+                    console.log(response);
+                    fulfill(response);
+                } else {
+                    console.log("new user");
+                    userdb.post(data).then(response => {
+                        fulfill(response);
+                    }).catch(error => {
+                        reject(error);
+                    });
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            });
         });
     });
 }
@@ -148,7 +176,6 @@ app.get('/readme-content', (req, res) => {
     });
 
     rl.on('close', () => {
-        console.log(renderedMD);
         res.send("<div>" + renderedMD + "</div>");
     });
 });

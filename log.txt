@@ -9,3 +9,6 @@
 [Wed, 27 Jul 2016 23:40:13 GMT] [info] [<0.000.0>] ::1 - - GET /users/docs 404
 [Wed, 27 Jul 2016 23:40:19 GMT] [info] [<0.000.0>] ::1 - - GET /users/docs 404
 [Wed, 27 Jul 2016 23:40:24 GMT] [info] [<0.000.0>] ::1 - - GET /users/ 200
+[Sat, 30 Jul 2016 20:14:01 GMT] [info] [<0.000.0>] ::1 - - GET /users/all_docs 404
+[Sat, 30 Jul 2016 20:14:06 GMT] [info] [<0.000.0>] ::1 - - GET /users/all 404
+[Sat, 30 Jul 2016 20:14:19 GMT] [info] [<0.000.0>] ::1 - - GET /users 200

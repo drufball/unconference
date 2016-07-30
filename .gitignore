@@ -4,6 +4,7 @@ node_modules
 build
 talks/*
 users/*
+users-mrview-*
 pouch__all_dbs__/*
 _replicator/*
 _users/*
