@@ -3,6 +3,7 @@
 <link rel="import" href="../polymer/iron-collapse/iron-collapse.html">
 <link rel="import" href="../polymer/iron-media-query/iron-media-query.html">
 <dom-module id="expandable-card">
+<link rel="import" href="../polymer/iron-localstorage/iron-localstorage.html">
 
 <!-- DOM + styling -->
 <template>
@@ -64,6 +65,10 @@
     </style>
 
     <!-- Element DOM -->
+    <iron-localstorage name="user-id"
+                       value="{{user}}"
+                       on-iron-localstorage-load-empty="initls">
+    </iron-localstorage>
     <iron-media-query query="(min-width: 750px)" query-matches="{{expand}}"></iron-media-query>
     <div id="container">
         <iron-icon id="like-btn" on-tap="toggleLiked" icon="favorite-border"></iron-icon>
@@ -89,7 +94,15 @@
                 type: Boolean,
                 value: false
             },
-            docId: String
+            user: {
+                type: Object,
+                value: function() { return {}; },
+                notify: true
+            },
+            doc: {
+                type: Object,
+                notify: true
+            }
         },
         listeners: {
             'expand-changed': 'fixTitle'
@@ -117,6 +130,7 @@
         },
 
         toggleLiked: function () {
+            console.log(this.doc);
             var likeBtn = this.$['like-btn'];
             if(likeBtn.className == "liked") {
                 likeBtn.className = "";

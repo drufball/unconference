@@ -24,7 +24,7 @@
 
     <!-- Element DOM -->
     <template is="dom-repeat" items="{{talks}}">
-        <expandable-card doc-id="{{item._id}}">
+        <expandable-card doc="{{item}}">
             <div class="card-title">{{item.title}}</div>
             <div class="card-description">{{item.description}}</div>
         </expandable-card>
