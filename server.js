@@ -110,7 +110,7 @@ app.post('/talks/update', (req, res) => {
         console.log("no body specified");
     }
 });
-app.get('/talks/:talk', (req, res) => {
+app.get('/talks/view/:talk', (req, res) => {
     get_talks(req.params.talk)
     .then(result => {
         res.json(result);

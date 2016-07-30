@@ -62,7 +62,7 @@
         active="{{addTalkActive}}"></app-route>
     <!-- Element DOM -->
     <template is="dom-if" if="{{!addTalkActive}}">
-        <talk-list src="../talks/all"></talk-list>
+        <talk-list id="talks" src="../talks/view/all"></talk-list>
         <!-- Add a new talk -->
         <a href="/talks/add"><paper-fab icon="add"></paper-fab></a>
     </template>
@@ -125,7 +125,15 @@
                 'body': JSON.stringify(data)
             })
             .then(response => {
-                return true;
+                if(response.ok) {
+                    response.json()
+                    .then(json => {
+                        data._id = json.id;
+                        data._rev = json.rev;
+                        this.$$('#talks').addTalkLocal(data);
+                    });
+                    return true;
+                }
             })
         }
     });

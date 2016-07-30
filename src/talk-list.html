@@ -60,6 +60,12 @@
                     this.talks = talk_data;
                 })
             });
+        },
+
+        addTalkLocal: function(talk) {
+            console.log(talk);
+            this.talks.push(talk);
+            this.talks = this.talks.slice(0);
         }
     });
 </script>
