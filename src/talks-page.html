@@ -101,7 +101,10 @@
                 notify: true
             }
         },
-
+        update: function() {
+            console.log("talks page updated");
+            this.$$('#talks').updateData();
+        },
         submit: function() {
             var data = {};
             data.title = this.$$('#title').value;

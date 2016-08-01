@@ -4,6 +4,9 @@
 <link rel="import" href="../polymer/iron-media-query/iron-media-query.html">
 <dom-module id="expandable-card">
 <link rel="import" href="../polymer/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../polymer/paper-input/paper-input.html">
+<link rel="import" href="../polymer/paper-input/paper-textarea.html">
+<link rel="import" href="../polymer/paper-button/paper-button.html">
 
 <!-- DOM + styling -->
 <template>
@@ -12,13 +15,14 @@
         :host {
             display: block;
             box-sizing: border-box;
-            width: 100%;
+            width: calc(100% - 10px);
         }
-        #container {
+        #container, #edit {
             box-sizing: inherit;
             width: 100%;
-            border: solid 1px;
             padding: 10px;
+            background-color: white;
+            box-shadow: 0 0 15px gray;
         }
         .card-content {
             width: 100%;
@@ -27,12 +31,12 @@
         h1 {
             line-height: 1em;
         }
-        ::content .card-title {
+        .card-title {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        ::content .expand-title {
+        .expand-title {
             white-space: normal;
         }
         #description {
@@ -62,16 +66,41 @@
         .liked {
             fill: red;
         }
+        .hidden {
+            display: none;
+        }
+
+        #btnHolder {
+            width: 100%;
+            text-align: right;
+            margin-top: 15px;
+        }
+        paper-button#save {
+            background: rgb(97, 8, 145);
+            color: white;
+        }
+        paper-button#delete {
+            background: rgb(217, 33, 8);
+            color: white;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 
     <!-- Element DOM -->
-    <iron-localstorage name="user-id"
+    <iron-localstorage id="auth"
+                       name="user-id"
                        value="{{user}}"
                        on-iron-localstorage-load-empty="initls">
     </iron-localstorage>
     <iron-media-query query="(min-width: 750px)" query-matches="{{expand}}"></iron-media-query>
     <div id="container">
         <div id="like-btn">
+            <template is="dom-if" if="{{presenter}}">
+                <iron-icon on-tap="edit" icon="create"></iron-icon>
+            </template>
             <span>{{numLikes}}</span>
             <template is="dom-if" if="{{!liked}}">
                 <iron-icon on-tap="toggleLiked" icon="favorite-border"></iron-icon>
@@ -81,9 +110,22 @@
             </template>
         </div>
         <div class="card-content" on-tap="toggle">
-            <h1><content id="title" select=".card-title"></content></h1>
-            <iron-collapse opened="[[expand]]" id="description"><content select=".card-description"></content>
+            <h1>
+                <div id="title" class="card-title">{{doc.title}}</div>
+            </h1>
+            <h2 id="presenters"></h2>
+            <iron-collapse opened="[[expand]]" id="description"><div class="card-description">{{doc.description}}</div>
             </iron-collapse>
+        </div>
+    </div>
+    <div id="edit" class="hidden">
+        <paper-input label="Title" id="editTitle"></paper-input>
+        <paper-input label="Presenters" id="editPresenters"></paper-input>
+        <paper-textarea label="Talk description" id="editDescription"></paper-textarea>
+        <div id="btnHolder">
+            <paper-button raised id="cancel"><a href="/talks">Cancel</a></paper-button>
+            <paper-button raised id="delete" on-tap="delete"><a href="/talks">Delete</a></paper-button>
+            <paper-button raised id="save" on-tap="submit"><a href="/talks">Save</a></paper-button>
         </div>
     </div>
 </template>
@@ -119,30 +161,80 @@
             numLikes: {
                 type: Number,
                 computed: 'countLikes(doc.likes)'
+            },
+            presenter: {
+                type: Boolean,
+                computed: 'isPresenter(user.username, doc.presenters)'
+            },
+            editing: {
+                type: Boolean,
+                value: false,
+                notify: true
             }
         },
         listeners: {
-            'expand-changed': 'fixTitle'
+            'expand-changed': 'fixTitle',
+            'talks-loaded': 'updateData'
         },
 
         // Instance Methods
+        updateData: function() {
+            console.log("called in card");
+            this.$.auth.reload();
+        },
+        isPresenter: function(username, presenters) {
+            console.log(username);
+            console.log(presenters);
+            return presenters.includes(username);
+        },
+        edit: function() {
+            this.editing = true;
+            this.$.container.classList.add('hidden');
+            this.$.edit.classList.remove('hidden');
+            this.$.editTitle.value = this.doc.title;
+            this.$.editPresenters.value = this.doc.presenters.join(', ');
+            this.$.editDescription.value = this.doc.description;
+        },
+        submit: function() {
+            this.set('doc.title', this.$.editTitle.value);
+            var presenter_array = this.$.editPresenters.value.split(',');
+            presenter_array.forEach((element, index, array) => {
+                array[index] = array[index].trim();
+            });
+            this.set('doc.presenters', presenter_array);
+            this.set('doc.description', this.$.editDescription.value);
+            this.$.container.classList.remove('hidden');
+            this.$.edit.classList.add('hidden');
+            this.update();
+        },
+        delete: function() {
+            this.doc._deleted = true;
+            this.update();
+            this.fire('talk-deleted');
+            console.log("deleted");
+        },
         isLiked: function(likes, id) {
             return likes.includes(id);
         },
         countLikes: function(likes) {
             return likes.length;
         },
+        ready: function() {
+            var presenters = this.$.presenters;
+            presenters.innerHTML = this.doc.presenters.join(', ');
+        },
         toggle: function () {
-            console.log(this.doc);
+            this.$.auth.reload();
+            console.log(this.user.username);
             if(!this.expand) {
                 this.$.description.toggle();
-                var titleClasses = this.getContentChildren('#title')[0].classList;
+                var titleClasses = this.$.title.classList;
                 titleClasses.toggle('expand-title');
                 this.opened = !this.opened;
             }
         },
         fixTitle: function () {
-            var titleClasses = this.getContentChildren('#title')[0].classList;
+            var titleClasses = this.$.title.classList;
             if(this.expand) {
                 titleClasses.add('expand-title');
             } else if (!this.opened) {
@@ -167,6 +259,9 @@
                 this.doc.likes = this.doc.likes.slice(0);
                 this.notifyPath('doc.likes', this.doc.likes);
             }
+            this.update();
+        },
+        update: function() {
             // Update the doc on the remote server
             // Create an empty Headers instance
             var headers = new Headers();
@@ -189,7 +284,7 @@
                 }
                 console.log(response);
             });
-        },
+        }
 
 
     });

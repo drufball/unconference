@@ -11,12 +11,19 @@
         :host {
             display: flex;
             flex-flow: column;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        expandable-card {
+            margin:5px;
+            
         }
 
         @media (min-width: 750px) {
             :host {
                 flex-flow: row wrap;
-                align-items: stretch;
+                justify-content: space-around;
             }
         }
 
@@ -24,9 +31,7 @@
 
     <!-- Element DOM -->
     <template is="dom-repeat" items="{{talks}}">
-        <expandable-card doc="{{item}}">
-            <div class="card-title">{{item.title}}</div>
-            <div class="card-description">{{item.description}}</div>
+        <expandable-card doc="{{item}}" class="talk">
         </expandable-card>
     </template>
 </template>
@@ -42,6 +47,9 @@
                 value: function() { return []; },
                 notify: true
             }
+        },
+        listeners: {
+            'talk-deleted': 'removeTalkLocal'
         },
 
         factoryImpl: function(src) {
@@ -61,7 +69,28 @@
                 })
             });
         },
-
+        updateData: function() {
+            console.log("called");
+            var talk_elements = Polymer.dom(this.root).querySelectorAll('.talk');
+            talk_elements.forEach((element, index, array) => {
+                element.updateData();
+            });
+        },
+        removeTalkLocal: function(e) {
+            console.log("removing");
+            var deleted_talks = [];
+            this.talks.forEach((element, index, array) => {
+                if(element._deleted) {
+                    console.log(element);
+                    deleted_talks.push(index);
+                    console.log(index);
+                }
+            });
+            deleted_talks.forEach((element, index, array) => {
+                console.log(this.talks.splice(element, 1));
+            });
+            this.talks = this.talks.slice(0);
+        },
         addTalkLocal: function(talk) {
             console.log(talk);
             this.talks.push(talk);
