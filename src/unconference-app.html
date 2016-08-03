@@ -207,6 +207,7 @@
           })
           .then(response => {
               if(response.ok) {
+                  console.log(response);
                   response.json()
                   .then(json => {
                       this.set('user.id', json.id);
