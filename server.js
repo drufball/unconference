@@ -44,6 +44,7 @@ var userdb = new PouchDB('users');
 
 app.use('/src', express.static('src'));
 app.use('/polymer', express.static('polymer'));
+app.use('/images', express.static('images'));
 
 // Database helpers
 function add_talk(data) {
