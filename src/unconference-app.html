@@ -212,6 +212,7 @@
                   .then(json => {
                       console.log(json);
                       console.log(data);
+                      console.log(this.user);
                       this.set('user.id', json.id);
                       this.set('user.username', data.username);
                       console.log("Logged in with ID: " + this.user.username);
