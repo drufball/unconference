@@ -11,7 +11,7 @@
             box-sizing: border-box;
             width: 80%;
             padding: 50px 20%;
-            text-align: center;
+
         }
         table {
             width: 100%;
@@ -20,9 +20,14 @@
         td {
             border: solid 1px;
             background-color: white;
+            text-align: center;
         }
         .time {
             width: 100px;
+        }
+        .rooms {
+            width:100%;
+            padding: 0 40%;
         }
 
     </style>
@@ -63,6 +68,16 @@
 
 
     </table>
+    <div class="rooms"><strong>Main Room:</strong> <a href="https://map.googleplex.com/?vlat=40.740729891099996&vlng=-74.00221780160003&zoom=19&vlevel=14&q=uptown%20training&lat=40.74147821689999&lng=-74.0031807526&radius=174&searchtype=nearby&level=14">Uptown Training</a></div>
+    <div class="rooms"><strong>Side Rooms:</strong>
+        <ul>
+            <li>10am - <a href="https://map.googleplex.com/?vlat=40.74147821689999&vlng=-74.0031807526&zoom=19&vlevel=14&q=hot%20nuts&lat=37.789567225&lng=-122.38894616599998&searchtype=nearby&level=5">Hot Nuts</a></li>
+            <li>11am - <a href="https://map.googleplex.com/?vlat=40.7410956068&vlng=-74.00271776709998&zoom=19&vlevel=14&q=chrysler&lat=40.740729891099996&lng=-74.00221780160003&radius=174&searchtype=nearby&level=14">Chrysler Building</a></li>
+            <li>1pm - <a href="https://map.googleplex.com/?vlat=40.74144491050001&vlng=-74.00343557759999&zoom=19&vlevel=14&q=dollar%20slice&lat=40.74144491050001&lng=-74.00343557759999&radius=174&searchtype=nearby&level=14">Dollar Slice</a></li>
+            <li>2pm - <a href="https://map.googleplex.com/?vlat=40.74148631420001&vlng=-74.00368525700001&zoom=19&vlevel=14&q=Met%20Life%20to&lat=40.74144491050001&lng=-74.00343557759999&radius=174&searchtype=nearby&level=14">Met Life Tower</a></li>
+            <li>3:30pm - TBD</li>
+        </ul>
+    </div>
 </template>
 
 <!-- Element declaration + script -->

@@ -183,11 +183,16 @@ app.get('/readme-content', (req, res) => {
 
 var childProcess = require('child_process');
 var fs = require('fs');
-const CONFLICT_VALUES = {};
-const ROOMS = [20, 10];
-const TIME_SLOTS = 5;
-const SCHEDULE = initSchedule(ROOMS, TIME_SLOTS);
+var CONFLICT_VALUES = {};
+var ROOMS = [20, 10];
+var TIME_SLOTS = 5;
+var SCHEDULE = initSchedule(ROOMS, TIME_SLOTS);
 app.get('/schedule-content', (req, res) => {
+    CONFLICT_VALUES = {};
+    ROOMS = [20, 10];
+    TIME_SLOTS = 5;
+    SCHEDULE = initSchedule(ROOMS, TIME_SLOTS);
+
     var options = { include_docs:true };
     talkdb.allDocs(options).then(response => {
         // console.log("Talk data read - read " + response.rows.length + " talks. Sanitizing data...");
