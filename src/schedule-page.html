@@ -49,7 +49,10 @@
                 </td>
                 <template is="dom-if" if="{{!slot.break}}">
                     <template is="dom-repeat" items="[[getTalks(slot.time)]]" as="talk">
-                        <td>{{talk.title}}</td>
+                        <td>
+                            <div>{{talk.title}}</div>
+                            <div><strong>Presenter: </strong>{{talk.presenter}}</div>
+                        </td>
                     </template>
                 </template>
                 <template is="dom-if" if="{{slot.break}}">
