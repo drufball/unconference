@@ -7,6 +7,23 @@
 <template>
     <!-- Element styling -->
     <style>
+        :host {
+            box-sizing: border-box;
+            width: 80%;
+            padding: 50px 20%;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            padding: 0 20%;
+        }
+        td {
+            border: solid 1px;
+            background-color: white;
+        }
+        .time {
+            width: 100px;
+        }
 
     </style>
 
@@ -14,7 +31,7 @@
     <table>
         <!-- Headers -->
         <tr>
-            <th>Time</th>
+            <th class="time">Time</th>
             <template is="dom-repeat" items="{{schedule.rooms}}" as="room">
                 <th>
                     <div>{{room.name}}</div>
@@ -27,8 +44,8 @@
         <template is="dom-repeat" items="{{schedule.slots}}" as="slot">
             <tr>
                 <td>
-                    <div>{{slot.time}}</div>
-                    <div>{{slot.duration}}</div>
+                    <div class="time">{{slot.time}}</div>
+                    <div>{{slot.duration}} min</div>
                 </td>
                 <template is="dom-if" if="{{!slot.break}}">
                     <template is="dom-repeat" items="[[getTalks(slot.time)]]" as="talk">
@@ -36,7 +53,7 @@
                     </template>
                 </template>
                 <template is="dom-if" if="{{slot.break}}">
-                    <td colspan="3">Break</td>
+                    <td colspan="2">Break</td>
                 </template>
             <tr>
         </template>

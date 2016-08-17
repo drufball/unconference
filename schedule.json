@@ -1,26 +1,101 @@
 {
-    "rooms": [
-        {"name":"MUC-ARP-Moonshot", "capacity":200},
-        {"name":"MUC-ARP-10X", "capacity":50},
-        {"name":"MTV-43-Dapaong", "capacity":10}
-    ],
-    "slots": [
-        {"time":"10am", "duration":45, "break":false},
-        {"time":"10:45am", "duration":15, "break":true},
-        {"time":"11am", "duration":45, "break":false},
-        {"time":"11:45am", "duration":15, "break":true},
-        {"time":"12pm", "duration":60, "break":true}
-    ],
-    "talks": {
-        "10am": [
-            {"title":"Platform Predictability", "presenter":"Rick Byers"},
-            {"title":"Async append", "presenter":"Dru Knox"},
-            {"title":"Current state of storage", "presenter":"Josh Bell"}
-        ],
-        "11am": [
-            {"title":"Platform Predictability", "presenter":"Rick Byers"},
-            {"title":"Async append", "presenter":"Dru Knox"},
-            {"title":"Current state of storage", "presenter":"Josh Bell"}
-        ]
+  "rooms": [
+    {
+      "name": "Main room",
+      "capacity": 20
+    },
+    {
+      "name": "Side room",
+      "capacity": 10
     }
+  ],
+  "slots": [
+    {
+      "time": "10am",
+      "duration": 60,
+      "break": false
+    },
+    {
+      "time": "11am",
+      "duration": 60,
+      "break": false
+    },
+    {
+      "time": "12pm",
+      "duration": 60,
+      "break": true
+    },
+    {
+      "time": "1pm",
+      "duration": 60,
+      "break": false
+    },
+    {
+      "time": "2pm",
+      "duration": 60,
+      "break": false
+    },
+    {
+      "time": "3pm",
+      "duration": 30,
+      "break": true
+    },
+    {
+      "time": "3:30pm",
+      "duration": 60,
+      "break": false
+    }
+  ],
+  "talks": {
+    "10am": [
+      {
+        "title": "Testing Postman",
+        "presenter": "postman"
+      },
+      {
+        "title": "Heh heh heh",
+        "presenter": "lizard"
+      }
+    ],
+    "11am": [
+      {
+        "title": "Testing Postman",
+        "presenter": "postman"
+      },
+      {
+        "title": "Everything works now",
+        "presenter": "HUZZAH"
+      }
+    ],
+    "1pm": [
+      {
+        "title": "This is the end",
+        "presenter": "god, devil"
+      },
+      {
+        "title": "Huh",
+        "presenter": "What went wrong"
+      }
+    ],
+    "2pm": [
+      {
+        "title": "addTalkLocal",
+        "presenter": "Polymer"
+      },
+      {
+        "title": "Take 2",
+        "presenter": "blah"
+      }
+    ],
+    "3:30pm": [
+      {
+        "title": "Make sure nothing broke",
+        "presenter": "Please be ok"
+      },
+      {
+        "title": "One more time",
+        "presenter": "daft punk"
+      }
+    ]
+  }
 }

@@ -12,3 +12,10 @@
 [Sat, 30 Jul 2016 20:14:01 GMT] [info] [<0.000.0>] ::1 - - GET /users/all_docs 404
 [Sat, 30 Jul 2016 20:14:06 GMT] [info] [<0.000.0>] ::1 - - GET /users/all 404
 [Sat, 30 Jul 2016 20:14:19 GMT] [info] [<0.000.0>] ::1 - - GET /users 200
+[Wed, 17 Aug 2016 07:27:46 GMT] [info] [<0.000.0>] ::1 - - GET /delete/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
+[Wed, 17 Aug 2016 07:28:01 GMT] [info] [<0.000.0>] ::1 - - GET /talks 200
+[Wed, 17 Aug 2016 07:28:05 GMT] [info] [<0.000.0>] ::1 - - GET /talks/delete/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
+[Wed, 17 Aug 2016 07:28:17 GMT] [info] [<0.000.0>] ::1 - - GET /talks/remove/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
+[Wed, 17 Aug 2016 07:28:20 GMT] [info] [<0.000.0>] ::1 - - GET /talks/remove/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
+[Wed, 17 Aug 2016 07:28:23 GMT] [info] [<0.000.0>] ::1 - - GET /talks/get/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
+[Wed, 17 Aug 2016 07:28:25 GMT] [info] [<0.000.0>] ::1 - - GET /talks/get/E170A7C0-D00A-5939-AB37-89011DE6E36B 404
